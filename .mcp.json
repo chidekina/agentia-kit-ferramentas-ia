@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dias": {
+      "command": "node",
+      "args": ["--experimental-strip-types", "exemplos/mcp-server-ts/src/servidor.ts"]
+    }
+  }
+}
