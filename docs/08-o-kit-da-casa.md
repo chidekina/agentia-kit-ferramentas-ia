@@ -70,16 +70,16 @@ O modelo **não reconhece o próprio erro**. Quem reconhece é a máquina, pela 
 
 ```
 1 ferramenta falha      PostToolUseFailure -> tool-errors.log      19.945 falhas registradas
-2 vira assinatura       normaliza linha, caminho, número -> hash  3.758 padrões distintos
+2 vira assinatura       troca linha, arquivo, aspas -> hash       3.758 padrões distintos
 3 repetiu 3 vezes?      rascunho em pending-lessons.md
-4 alguém aprova         /lesson: Erro / Contexto / Regra / Repetições -> lessons.md   (69 lições)
+4 alguém aprova         /lesson: Erro / Contexto / Regra / Repetições -> lessons.md   (66 lições)
 5 indexa                embedding de cada regra, com modelo local (Ollama)            (64 no índice)
 6 volta na hora certa   antes de CADA comando, busca as regras parecidas              (77.500 injeções)
 7 ignorou de novo?      relatório de promoção -> um humano escreve o hook que bloqueia
 ```
 
-- **Passo 2** é o que torna erros diferentes "o mesmo": `line 42` vira `line N`, `src/app.ts`
-  vira `FILE.ts`, texto entre aspas vira `'X'`. Sem isso, cada ocorrência seria única e nada
+- **Passo 2** é o que torna erros diferentes "o mesmo": `line 42` vira `line N`, `(3,7)` vira
+  `(N,N)`, `src/app.ts` vira `src/FILE.ts` (só o nome do arquivo), texto entre aspas vira `'X'`. Sem isso, cada ocorrência seria única e nada
   repetiria.
 - **Passo 4** passa por aprovação. O rascunho só é promovido sozinho quando já repetiu 5 vezes
   **e** tem a regra preenchida; antes disso, alguém lê.
