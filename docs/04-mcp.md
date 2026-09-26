@@ -51,7 +51,8 @@ Sim — saiu a sessão, não o protocolo. Mas **nem tudo precisa virar MCP**:
   você quer controlar o que o agente pode fazer (ferramenta nomeada, parâmetro validado) e quando
   vários agentes diferentes vão usar a mesma ferramenta.
 
-Os MCPs mais chamados na casa são Linear (231), GitHub (80) e Supabase (81): remotos ou com estado.
+Os MCPs mais chamados na casa são Linear (231), ARIA (197, o nosso assistente), Supabase (81) e
+GitHub (80): remotos ou com estado próprio.
 
 ## Servidores que vale mostrar (conferidos em 2026-09-25)
 
