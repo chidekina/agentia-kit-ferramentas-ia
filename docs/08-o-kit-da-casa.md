@@ -41,23 +41,61 @@ commit atômico e escreve o `SUMMARY.md`. Uso medido: `gsd-executor` 1.071, `pla
 
 ### 3. Hooks em cada instante
 
-| evento | quantos | exemplos |
-|---|---|---|
-| `SessionStart` | 21 | estado do projeto, smoke test do próprio harness (292 casos) |
-| `UserPromptSubmit` | 12 | injeta a regra de roteamento de ferramenta |
-| `PreToolUse` | 46 | gate de TDD, `cwd-guard`, lições relevantes, regras de arquitetura, roteador de modelo |
-| `PostToolUse` | 25 | nomenclatura BDD de teste |
-| `Stop` / `SubagentStop` | 16 / 4 | custo da sessão, mutação, revisão depois de subagente |
+Um hook é um script que o Claude Code roda sozinho num momento fixo. Ele recebe um JSON com o que
+está acontecendo (ferramenta, arquivo, comando) e pode **injetar texto** no contexto do modelo,
+**bloquear** a ação (exit 2 — a mensagem volta ao modelo como explicação) ou só **registrar**.
+A diferença para uma linha no `AGENTS.md`: a linha o modelo pode ignorar; o hook, não.
 
-### 4. O agente que aprende com o erro
+| evento | quantos | para quê | exemplos da casa |
+|---|---|---|---|
+| `SessionStart` | 21 | orientar e conferir que o ambiente está são | estado do projeto (`STATE.md`); smoke test dos próprios hooks resumido em **uma** linha; aviso de MCP configurado mas morto |
+| `UserPromptSubmit` | 12 | pôr contexto do momento em cada mensagem | regra de qual ferramenta usar primeiro; aviso de que o `HEAD` do git andou com trabalho não commitado |
+| `PreToolUse` | 46 | as guardas — antes de cada ação | sem teste, não escreve código (`tdd-guard`); `cd x && cmd` bloqueado (`cwd-guard`); `rm -rf` com variável bloqueado; não edita arquivo que mudou desde a leitura; lições relevantes injetadas; modelo sugerido para cada subagente |
+| `PostToolUse` | 25 | conferir o resultado | roda os testes depois de editar e avisa se a cobertura caiu de 80%; nome de teste em formato BDD |
+| `Stop` / `SubagentStop` | 16 / 4 | fechar a conta ao fim da resposta | suíte de testes; teste de mutação; custo da sessão; revisão obrigatória depois de subagente de risco alto |
+| outros 7 | 1 cada | compactação de contexto, erro de ferramenta, fim de sessão… | `PostToolUseFailure` registra toda falha — é o começo do ciclo de lições |
 
-1. **Registra** — erro que se repete vira entrada em `lessons.md` (69 lições).
-2. **Injeta** — antes de cada comando, as lições relevantes para aquele comando entram no contexto
-   (busca por embedding; o Jev julga a relevância). ~127 mil injeções registradas.
-3. **Promove** — lição que o modelo ignora vira hook que bloqueia. O `cwd-guard` nasceu de 376
-   repetições do mesmo erro.
-4. **Mede** — todo evento vai para um log (~393 mil). Antes de instalar algo novo, olha-se o que é
-   usado de verdade.
+Hooks que barraram a preparação desta aula: `tdd-guard` (arquivo sem teste), `cwd-guard`
+(`cd` encadeado), `bash-safety` (`rm -rf $S/...` que viraria `rm -rf /` com a variável vazia),
+`file-lock-check` (arquivo mudado desde a leitura). E o pre-commit do **git** — que não é hook do
+Claude Code, roda em qualquer commit — recusou um diff de 1.454 linhas e um `console.log`.
+
+Contra-exemplo, também medido: o aviso de nomenclatura BDD dispara em todo teste escrito em
+português (`quando`/`então`), porque procura `when`/`then`. Alerta que dispara sempre vira ruído
+que ninguém lê.
+
+### 4. Como um erro vira lição
+
+O modelo **não reconhece o próprio erro**. Quem reconhece é a máquina, pela **repetição**:
+
+```
+1 ferramenta falha      PostToolUseFailure -> tool-errors.log      19.945 falhas registradas
+2 vira assinatura       troca linha, arquivo, aspas -> hash       3.758 padrões distintos
+3 repetiu 3 vezes?      rascunho em pending-lessons.md
+4 alguém aprova         /lesson: Erro / Contexto / Regra / Repetições -> lessons.md   (66 lições)
+5 indexa                embedding de cada regra, com modelo local (Ollama)            (64 no índice)
+6 volta na hora certa   antes de CADA comando, busca as regras parecidas              (77.500 injeções)
+7 ignorou de novo?      relatório de promoção -> um humano escreve o hook que bloqueia
+```
+
+- **Passo 2** é o que torna erros diferentes "o mesmo": `line 42` vira `line N`, `(3,7)` vira
+  `(N,N)`, `src/app.ts` vira `src/FILE.ts` (só o nome do arquivo), texto entre aspas vira `'X'`. Sem isso, cada ocorrência seria única e nada
+  repetiria.
+- **Passo 4** passa por aprovação. O rascunho só é promovido sozinho quando já repetiu 5 vezes
+  **e** tem a regra preenchida; antes disso, alguém lê.
+- **Passo 6** nunca bloqueia: similaridade não é motivo para parar um comando. Fora do caminho
+  crítico, o Jev julga em lote se a lição injetada era mesmo relevante, e isso calibra a próxima.
+- **Passo 7** é só relatório. Escrever o hook é decisão humana. O `cwd-guard` nasceu assim, depois
+  de 376 repetições do mesmo erro.
+
+**Onde o ciclo falha (medido):**
+
+- De ~127 mil tentativas de injeção, **29.557 estouraram o prazo** (~23%) e 20.453 ficaram abaixo
+  do limiar. Hook no caminho de todo comando precisa ser rápido, senão fica mudo exatamente quando
+  mais importa.
+- Existe um canal para capturar **correção do usuário** ("está errado", "na verdade", "você
+  errou"). Ele funciona com uma correção forjada, mas nunca capturou uma real: gente corrige
+  perguntando ("a gente usa todos esses?"), e a regra só casa frase explícita.
 
 ### 5. Roteador de modelo
 
