@@ -28,6 +28,32 @@ https://blog.modelcontextprotocol.io/posts/2026-07-28/
 ⚠ Não achamos fonte primária dizendo que o Claude Code já fala a versão 2026-07-28. Os servidores
 abaixo funcionam hoje; a mudança é de bastidor.
 
+### "Sem sessão", explicado
+
+| | antes | agora (2026-07-28) |
+|---|---|---|
+| começo | aperto de mão `initialize` | nenhum; `server/discover` é opcional |
+| sessão | `Mcp-Session-Id`: o servidor tem de lembrar | cada pedido leva versão, cliente e capacidades |
+| várias cópias do servidor | cliente "grudado" numa máquina | qualquer cópia atende; balanceador comum basta |
+| pergunta no meio da chamada | canal aberto servidor → cliente | servidor responde `input_required`; o cliente refaz com a resposta |
+| servidor local (stdio) | um processo, um cliente | quase nada muda |
+
+Antes, só o garçom que anotou o pedido podia te atender; agora cada pedido vai com a comanda
+inteira. O exemplo `dias` deste kit ainda usa o aperto de mão (SDK 1.30) e funciona.
+
+## MCP ainda é necessário?
+
+Sim — saiu a sessão, não o protocolo. Mas **nem tudo precisa virar MCP**:
+
+- **CLI + skill basta** quando a ferramenta já tem linha de comando boa e roda local (`git`, `gh`,
+  `docker`, `jq`, `playwright-cli`). Menos token, uma peça a menos.
+- **MCP ganha** em serviço remoto com login (o MCP cuida do OAuth; o agente não vê a chave), quando
+  você quer controlar o que o agente pode fazer (ferramenta nomeada, parâmetro validado) e quando
+  vários agentes diferentes vão usar a mesma ferramenta.
+
+Os MCPs mais chamados na casa são Linear (231), ARIA (197, o nosso assistente), Supabase (81) e
+GitHub (80): remotos ou com estado próprio.
+
 ## Servidores que vale mostrar (conferidos em 2026-09-25)
 
 | servidor | para quê | instalar |

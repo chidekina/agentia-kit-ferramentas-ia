@@ -10,17 +10,24 @@ Um agente é **modelo + instrução + ferramentas + laço com teto**. O exemplo
 grande entra quando aparece: estado persistente, humano no meio do laço, vários agentes, retomada
 depois de falha.
 
-## Os que valem conhecer
+## O que a gente usa, e o que vale conhecer
 
-| framework | linguagem | quando | versão | status |
+A coluna **na casa** é contagem de repositórios na nossa pasta de projetos em 2026-09-25. Onde
+diz "vale conhecer", a gente **não usa** — está aqui porque a pesquisa mostrou que é relevante.
+
+| framework | linguagem | quando | versão | na casa |
 |---|---|---|---|---|
-| **Vercel AI SDK** (`ai`) | TS | padrão em TypeScript; `ToolLoopAgent`, troca de provedor por uma linha | 7.0.116 | padrão |
-| **Pydantic AI** | Python | agente tipado, troca de provedor por string | 2.50.0 | padrão |
-| **OpenAI Agents SDK** | Python / TS | ecossistema OpenAI, handoffs entre agentes | 0.22.3 | padrão |
-| **LangGraph** | Python / TS | grafo com estado, durável, humano no laço | 1.2.12 | padrão |
-| **Google ADK** | Python | ecossistema Gemini, A2A embutido | 2.10.0 | padrão |
-| **Claude Agent SDK** | Python / TS | o laço do Claude Code como biblioteca (arquivos, bash, MCP, skills) | TS 0.3.282 | padrão |
-| **Mastra** | TS | framework completo (agentes, workflows, memória) | `@mastra/core` 1.71 | em alta |
+| **SDK direto do provedor** (`openai`, `@anthropic-ai/sdk`) | TS / Python | chamada simples, sem laço de agente | — | **OpenAI 11, Anthropic 6** |
+| **Vercel AI SDK** (`ai`) | TS | padrão em TypeScript; `ToolLoopAgent`, troca de provedor por uma linha | 7.0.116 | **2** |
+| **LangGraph** | Python / TS | grafo com estado, durável, humano no laço | 1.2.12 | **1** |
+| Pydantic AI | Python | agente tipado, troca de provedor por string | 2.50.0 | vale conhecer |
+| OpenAI Agents SDK | Python / TS | ecossistema OpenAI, handoffs entre agentes | 0.22.3 | vale conhecer |
+| Claude Agent SDK | Python / TS | o laço do Claude Code como biblioteca (arquivos, bash, MCP, skills) | TS 0.3.282 | vale conhecer |
+| Google ADK | Python | ecossistema Gemini, A2A embutido | 2.10.0 | vale conhecer |
+| Mastra | TS | framework completo (agentes, workflows, memória) | `@mastra/core` 1.71 | vale conhecer |
+
+O que a gente mais usa para IA **dentro** das aplicações é o SDK do provedor, sem framework. A
+maior parte da IA da casa mora no **ambiente** (agente, skills, MCP, hooks) — ver `08-o-kit-da-casa.md`.
 
 Mantidos, mas não prioridade para a aula: CrewAI 1.15, DSPy 3.4, LlamaIndex 0.14, smolagents 1.26.
 

@@ -41,6 +41,20 @@ allowed-tools: Bash(git diff *) Read Grep
 Pesquisa, varredura, revisão: coisas que despejam muito texto. O subagente lê tudo e devolve **só a
 conclusão**; seu contexto principal fica limpo. `model: haiku` para tarefa barata.
 
+## Skill ou subagente? (a dúvida mais comum)
+
+| | skill | subagente |
+|---|---|---|
+| analogia | a **receita** que o cozinheiro consulta | **outro cozinheiro** para quem você passa a tarefa |
+| onde roda | na conversa atual | numa conversa separada |
+| contexto | o mesmo do agente principal | limpo, próprio |
+| o que devolve | nada — muda *como* o agente age | um resultado resumido |
+| modelo | o do agente principal | pode ser outro (`model: haiku`) |
+| para quê | ensinar um procedimento | delegar trabalho pesado e poupar contexto |
+
+Os dois combinam: uma skill pode rodar num subagente (`context: fork`), e um subagente pode usar
+skills.
+
 ## 4. Hook — a regra que o modelo não consegue ignorar
 
 ```json

@@ -57,7 +57,8 @@ find ~/projetos -maxdepth 6 -name package.json -not -path '*/node_modules/*' \
 | `@anthropic-ai/sdk` | 6 |
 | `@modelcontextprotocol/sdk` | 6 |
 | Vercel AI SDK (`ai`) | 2 |
-| LangChain / LangGraph | 1–2 |
+| LangGraph | 1 (Python) |
+| LangChain | 3 manifestos (2 Python, 1 JS) |
 
 **A leitura que importa:** a IA mora no **ambiente** (agente + skills + MCP + hooks), muito mais do
 que dentro dos produtos. Framework de agente é para quando o PRODUTO é um agente — e aí a gente

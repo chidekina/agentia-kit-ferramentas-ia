@@ -7,12 +7,27 @@ padrão** ou **técnica de nicho** — não é a mesma recomendação.
 
 | # | tendência | status | por que importa para você |
 |---|---|---|---|
-| 1 | **Agent Skills (`SKILL.md`) virou padrão aberto** — ~40 agentes leem o mesmo formato | padrão | a skill que você escreve hoje roda no agente que sua empresa usar amanhã |
+| 1 | **Skills (`SKILL.md`) viraram padrão aberto** — ~40 agentes leem o mesmo formato ("Agent Skills" é o nome do padrão) | padrão | a skill que você escreve hoje roda no agente que sua empresa usar amanhã |
 | 2 | **`AGENTS.md` como arquivo único de instrução** — sob a Agentic AI Foundation | padrão | um arquivo, todos os agentes |
-| 3 | **MCP 2026-07-28, sem estado** — servidor remoto escala como API comum | padrão | MCP remoto com OAuth virou o jeito normal de plugar SaaS no agente |
-| 4 | **CLI + skill no lugar de MCP** quando a CLI já existe (Playwright CLI) | em alta | menos token, menos peça móvel |
+| 3 | **MCP 2026-07-28: o protocolo ficou sem sessão** — servidor remoto escala como API comum (ver `04-mcp.md`) | padrão | o MCP continua necessário; saiu a sessão, não o protocolo |
+| 4 | **Nem tudo precisa virar MCP**: CLI + skill quando a CLI já existe (Playwright CLI) | em alta | menos token, menos peça móvel |
 | 5 | **Desenvolvimento guiado por spec** — GitHub Spec Kit 1.0 (spec → plano → tarefas) | nicho crescendo | é o que o nosso workflow faz com o GSD |
 | 6 | **Evals e observabilidade de LLM** — promptfoo, Langfuse, Phoenix | padrão em produto com IA | sem eval você não sabe se a troca de modelo piorou |
+
+## Eval e observabilidade — e o que a gente usa
+
+Teste normal compara igualdade (`soma(2,2) === 4`). LLM responde diferente à mesma pergunta — o
+agente do kit chamou a ferramenta em 5 de 6 corridas. **Eval mede taxa**: roda os mesmos casos
+várias vezes e compara modelos, prompts e versões. **Observabilidade** grava o que o modelo fez
+em produção (prompt, resposta, custo, latência).
+
+| ferramenta | tipo | quando | na casa |
+|---|---|---|---|
+| promptfoo | eval: casos em YAML, vários modelos, reprova no CI | antes do deploy: "o prompt novo piorou?" | não usamos |
+| Langfuse | observabilidade + eval sobre dado real | depois do deploy | não usamos |
+| **Phoenix** (Arize) | observabilidade em OpenTelemetry | depois do deploy | **sim** — roda aqui, recebe os traces das APIs |
+
+O exercício 7 (`EXERCICIOS.md`) é um eval feito à mão.
 
 ## Agentes de código — comparação
 

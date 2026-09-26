@@ -40,6 +40,7 @@ docs/
   05-frameworks-e-apis.md      frameworks de agente e APIs gratuitas para estudar
   06-tendencias-2026.md        o que está em alta, e o que morreu
   07-dicas-e-armadilhas.md     21 dicas que custaram caro
+  08-o-kit-da-casa.md          GSD, Ralph, ponytail, caveman, Jev — e como a gente orquestra agentes
 verificar-ferramentas.sh       diagnóstico do ambiente
 EXERCICIOS.md                  o que fazer na aula e depois dela
 ```
