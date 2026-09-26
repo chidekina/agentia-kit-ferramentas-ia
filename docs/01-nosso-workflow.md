@@ -32,6 +32,10 @@ chegar em produção. Cada etapa abaixo tem um portão.
 um conjunto de skills e subagentes que guarda estado em `.planning/` (roadmap, fases, planos,
 resumos). Qualquer um desses passos dá para fazer na mão — o GSD só impede de pular.
 
+Como os agentes se dividem dentro de cada etapa — orquestrador, planner, plan-checker, executores
+em ondas, verifier — e os hooks que rodam em cada instante estão em
+[`08-o-kit-da-casa.md`](08-o-kit-da-casa.md).
+
 ## As guardas que rodam sozinhas
 
 Instrução em prosa o modelo pode ignorar. Por isso a gente põe regra em **máquina**:
