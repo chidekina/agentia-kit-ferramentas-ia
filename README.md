@@ -3,6 +3,10 @@
 Semente da aula prática da **Agentia — Escola de IA**. Tudo o que a gente usa no dia a dia com IA,
 num repositório que você clona, roda e modifica.
 
+**Apresentação da aula** (56 slides): [PDF](https://github.com/chidekina/agentia-kit-ferramentas-ia/releases/download/v1.0-aula-ferramentas-ia/aula-ferramentas-frameworks-ia.pdf)
+· [HTML, roda offline](https://github.com/chidekina/agentia-kit-ferramentas-ia/releases/download/v1.0-aula-ferramentas-ia/aula-ferramentas-frameworks-ia.html)
+· [release](https://github.com/chidekina/agentia-kit-ferramentas-ia/releases/tag/v1.0-aula-ferramentas-ia)
+
 ## Começar (5 minutos)
 
 ```bash
